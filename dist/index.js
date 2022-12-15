@@ -527,6 +527,11 @@ async function run() {
       return
     }
 
+    if(!inputs.path) {
+      core.setFailed('❌ A sarif_file is required to execute this action')
+      return
+    }
+
     const {
       payload: { pull_request: pullRequest, repository }
     } = github.context;

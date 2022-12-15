@@ -15,10 +15,9 @@ jobs:
 
     - run: npm install
     - run: npm run package
-    - run: ls -R
 
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        path: test/_stubs/trivy-sarif.json
+        sarif_file: test/_stubs/trivy-sarif.json
         title: Dependency Check
