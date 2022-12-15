@@ -3,6 +3,8 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const fs = require('fs');
 
+const levelRegex = /\nSeverity: [A-Z]+/g;
+
 const originMeta = {
   commentFrom: 'Generate comments from sarif file',
 }
