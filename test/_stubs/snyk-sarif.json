@@ -1,0 +1,95 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Snyk Open Source",
+          "rules": [
+            {
+              "id": "SNYK-JS-ACTIONSCORE-2980270",
+              "shortDescription": {
+                "text": "Medium severity - Improper Input Validation vulnerability in @actions/core"
+              },
+              "fullDescription": {
+                "text": "(CVE-2022-35954) @actions/core@1.2.6"
+              },
+              "help": {
+                "text": "",
+                "markdown": "* Package Manager: npm\n* Vulnerable module: @actions/core\n* Introduced through: output-test-coverage@1.4.0 and @actions/core@1.2.6\n### Detailed paths\n* _Introduced through_: output-test-coverage@1.4.0 › @actions/core@1.2.6\n# Overview\n[@actions/core](https://www.npmjs.com/package/@actions/core) is a package that provides core functions for setting results, logging, registering secrets and exporting variables across actions.\n\nAffected versions of this package are vulnerable to Improper Input Validation via the `core.exportVariable` function which uses a well known delimiter that attackers can use to break out of that specific variable and assign values to other arbitrary variables. \r\n\r\n# Workaround\r\nModify your action to ensure that any user input does not contain the delimiter `_GitHubActionsFileCommandDelimeter_` before calling `core.exportVariable`.\n# Remediation\nUpgrade `@actions/core` to version 1.9.1 or higher.\n# References\n- [GitHub Commit](https://github.com/actions/toolkit/commit/4beda9cbc00ba6eefe387a937c21087ccb8ee9df)\n"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "CWE-20",
+                  "npm"
+                ]
+              }
+            },
+            {
+              "id": "SNYK-JS-NODEFETCH-2342118",
+              "shortDescription": {
+                "text": "Medium severity - Information Exposure vulnerability in node-fetch"
+              },
+              "fullDescription": {
+                "text": "(CVE-2022-0235,CVE-2022-1365) node-fetch@2.6.1"
+              },
+              "help": {
+                "text": "",
+                "markdown": "* Package Manager: npm\n* Vulnerable module: node-fetch\n* Introduced through: output-test-coverage@1.4.0, @actions/github@4.0.0 and others\n### Detailed paths\n* _Introduced through_: output-test-coverage@1.4.0 › @actions/github@4.0.0 › @octokit/core@3.1.2 › @octokit/request@5.4.9 › node-fetch@2.6.1\n* _Introduced through_: output-test-coverage@1.4.0 › @actions/github@4.0.0 › @octokit/core@3.1.2 › @octokit/graphql@4.5.6 › @octokit/request@5.4.9 › node-fetch@2.6.1\n# Overview\n[node-fetch](https://www.npmjs.com/package/node-fetch) is a light-weight module that brings window.fetch to node.js\n\nAffected versions of this package are vulnerable to Information Exposure when fetching a remote url with Cookie, if it get a `Location` response header, it will follow that url and try to fetch that url with provided cookie. This can lead to forwarding secure headers to 3th party.\n# Remediation\nUpgrade `node-fetch` to version 2.6.7, 3.1.1 or higher.\n# References\n- [Github Commit](https://github.com/node-fetch/node-fetch/commit/1ef4b560a17e644a02a3bfdea7631ffeee578b35)\n- [GitHub Commit](https://github.com/node-fetch/node-fetch/commit/36e47e8a6406185921e4985dcbeff140d73eaa10)\n- [GitHub Commit](https://github.com/node-fetch/node-fetch/pull/1449/commits/5c32f002fdd65b1c6a8f1e3620210813d45c7e60)\n- [GitHub PR](https://github.com/node-fetch/node-fetch/pull/1449)\n"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "CWE-200",
+                  "npm"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "SNYK-JS-ACTIONSCORE-2980270",
+          "level": "warning",
+          "message": {
+            "text": "This file introduces a vulnerable @actions/core package with a medium severity vulnerability."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package.json"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "SNYK-JS-NODEFETCH-2342118",
+          "level": "warning",
+          "message": {
+            "text": "This file introduces a vulnerable node-fetch package with a medium severity vulnerability."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package.json"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "safir-to-comment",
+  "version": "0.0.1",
+  "description": "Generate PR comments from SARIF json file",
+  "main": "index.js",
+  "scripts": {
+    "package": "ncc build index.js -o dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enmala-modyo/sarif-to-comment.git"
+  },
+  "keywords": [],
+  "author": "Enrique Maldonado",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/enmala-modyo/sarif-to-comment/issues"
+  },
+  "homepage": "https://github.com/enmala-modyo/sarif-to-comment#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  },
+  "devDependencies": {
+    "@zeit/ncc": "0.22.3"
+  }
+}
