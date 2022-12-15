@@ -45,11 +45,17 @@ async function run() {
 
     let levels = new Map();
     json.runs[0].results.forEach(result => {
-        const level = result.level != undefined ? result.level : 'undefined'
-        const count = levels.has(level) ? levels.get(level) : 0;
-        levels.set(level,count+1);
+      const text = result.message.text;
+      const levelText = text.match(levelRegex);
+      let level = levelText != null ? levelText.toString().split(' ')[1]: 'UNKNOWN'
+      if(level == 'UNKNOWN') {
+          level = result.level == undefined ? 'UNKNOWN' : result.level.toString().toUpperCase();
+      }
+      const count = levels.has(level) ? levels.get(level) : 0;
+      levels.set(level,count+1);
     });
 
+    // First I create a table with a resume of the results
     let resume = `<!--json:${JSON.stringify(originMeta)}-->
 |${inputs.title.padEnd(30)}|          |
 |------------------------------|----------|
@@ -59,6 +65,11 @@ async function run() {
         resume += `|${key.padEnd(30)}|${levels.get(key).toString().padStart(10)}|
 `
     };
+
+    // Now I add a coment for each issue in results
+    json.runs[0].results.forEach(result => { 
+      resume += `\n**${result.ruleId}**\n> ${result.message.text}\n`
+    });
 
     await deletePreviousComments({
       issueNumber,
