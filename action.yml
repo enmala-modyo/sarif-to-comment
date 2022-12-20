@@ -4,7 +4,7 @@ inputs:
   token:
     description: 'The GitHub authentication token'
     required: true
-  path:
+  sarif_file:
     description: 'Filepath to safir.json'
     required: true
   title:

@@ -511,16 +511,26 @@ const github = __webpack_require__(469);
 const fs = __webpack_require__(747);
 
 const originMeta = {
-  commentFrom: 'Comment Test Coverage as table',
+  commentFrom: 'Generate comments from sarif file',
 }
 
 async function run() {
   try {
     const inputs = {
-      token: core.getInput("token"),
-      path: core.getInput("path"),
+      token: core.getInput('token') || core.getInput('github_token') || process.env.GITHUB_TOKEN,
+      path: core.getInput("sarif_file"),
       title: core.getInput("title"),
     };
+
+    if(!inputs.token) {
+      core.setFailed('❌ A token is required to execute this action')
+      return
+    }
+
+    if(!inputs.path) {
+      core.setFailed('❌ A sarif_file is required to execute this action')
+      return
+    }
 
     const {
       payload: { pull_request: pullRequest, repository }
@@ -540,14 +550,22 @@ async function run() {
     const data = fs.readFileSync(`${process.env.GITHUB_WORKSPACE}/${inputs.path}`, 'utf8');
     const json = JSON.parse(data);
 
-    const coverage = `<!--json:${JSON.stringify(originMeta)}-->
-|${inputs.title}| %                           | values                                                              |
-|---------------|:---------------------------:|:-------------------------------------------------------------------:|
-|Statements     |${json.total.statements.pct}%|( ${json.total.statements.covered} / ${json.total.statements.total} )|
-|Branches       |${json.total.branches.pct}%  |( ${json.total.branches.covered} / ${json.total.branches.total} )    |
-|Functions      |${json.total.functions.pct}% |( ${json.total.functions.covered} / ${json.total.functions.total} )  |
-|Lines          |${json.total.lines.pct}%     |( ${json.total.lines.covered} / ${json.total.lines.total} )          |
+    let levels = new Map();
+    json.runs[0].results.forEach(result => {
+        const level = result.level != undefined ? result.level : 'undefined'
+        const count = levels.has(level) ? levels.get(level) : 0;
+        levels.set(level,count+1);
+    });
+
+    let resume = `<!--json:${JSON.stringify(originMeta)}-->
+|${inputs.title.padEnd(30)}|          |
+|------------------------------|----------|
+|${"Total".padEnd(30)}|${json.runs[0].results.length.toString().padStart(10)}|
 `;
+    for (const key of levels.keys()) {
+        resume += `|${key.padEnd(30)}|${levels.get(key).toString().padStart(10)}|
+`
+    };
 
     await deletePreviousComments({
       issueNumber,
@@ -560,7 +578,7 @@ async function run() {
       owner,
       repo,
       issue_number: issueNumber,
-      body: coverage,
+      body: resume,
     });
   } catch (error) {
     core.debug(inspect(error));
@@ -569,7 +587,7 @@ async function run() {
 }
 
 async function deletePreviousComments({ owner, repo, octokit, issueNumber }) {
-  const onlyPreviousCoverageComments = (comment) => {
+  const onlyPreviousSarifComments = (comment) => {
     const regexMarker = /^<!--json:{.*?}-->/;
     const extractMetaFromMarker = (body) => JSON.parse(body.replace(/^<!--json:|-->(.|\n|\r)*$/g, ''));
 
@@ -593,7 +611,7 @@ async function deletePreviousComments({ owner, repo, octokit, issueNumber }) {
 
   await Promise.all(
     commentList
-    .filter(onlyPreviousCoverageComments)
+    .filter(onlyPreviousSarifComments)
     .map(asyncDeleteComment)
   );
 }

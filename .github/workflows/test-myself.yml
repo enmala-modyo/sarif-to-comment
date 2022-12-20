@@ -1,19 +1,17 @@
-name: run-coverage
+name: run-dependency-check
 
 on: [pull_request]
 
 jobs:
-  lint-and-test:
+  analyze:
     runs-on: ubuntu-latest
-    env:
-      CI: true
     steps:
     - uses: actions/checkout@v2
 
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '12'
 
     - run: npm install
     - run: npm run package
@@ -21,5 +19,5 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        path: test/_stubs/coverage-summary-100-pct.json
-        title: Test Coverage
+        sarif_file: test/_stubs/trivy-sarif-2.json
+        title: Dependency Check Problems
