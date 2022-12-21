@@ -1,19 +1,19 @@
-name: 'Generates a PR comment from the content of a SAFIR file'
-description: 'Read a safir json report file and comment stats on to PR'
+name: Generates a PR comment from the content of a SAFIR file
+description: Read a safir json report file and comment stats on to PR
 inputs:
   token:
-    description: 'The GitHub authentication token'
+    description: The GitHub authentication token
     required: true
   sarif_file:
-    description: 'Filepath to safir.json'
+    description: Filepath to safir.json
     required: true
   title:
-    description: 'Comment title in PR conversation'
+    description: Comment title in PR conversation
     required: false
-    default: 'Security Report'
+    default: Security Report
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: node16
+  main: dist/index.js
 branding:
-  icon: 'message-square'
-  color: 'gray-dark'
+  icon: message-square
+  color: gray-dark

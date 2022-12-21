@@ -1,10 +1,10 @@
 {
   "name": "safir-to-comment",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generate PR comments from SARIF json file",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "package": "ncc build index.js -o dist"
+    "build": "npx @vercel/ncc build && npx convert-action"
   },
   "repository": {
     "type": "git",
@@ -20,8 +20,5 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0"
-  },
-  "devDependencies": {
-    "@zeit/ncc": "0.22.3"
   }
 }
