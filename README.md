@@ -30,7 +30,7 @@ jobs:
         severity-cutoff: critical
 
     - name: Comment Scan Output
-      uses: enmala-modyo/sarif-to-comment@0.0.1
+      uses: enmala-modyo/sarif-to-comment@0.0.2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         sarif_file: ${{ steps.scan.outputs.sarif }}
